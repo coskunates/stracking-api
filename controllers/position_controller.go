@@ -1,16 +1,17 @@
 package controllers
 
 import (
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
 	"stock/database"
 	"stock/models"
 	"stock/services"
+	"stock/utils/error_utils"
+	"stock/utils/response_utils"
 )
 
 var (
-	PositionController positionControllerInterface = &positionController{service: services.NewStockService(database.GetMockClient())}
+	PositionController positionControllerInterface = &positionController{service: services.NewStockService(database.GetClient())}
 )
 
 type positionControllerInterface interface {
@@ -24,18 +25,23 @@ type positionController struct {
 func (p positionController) Create(c echo.Context) error {
 	position := new(models.Position)
 	if err := c.Bind(position); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		restErr := error_utils.NewBadRequestError("bind error when trying to bind position", 1)
+		response := response_utils.NewErrorResponse(restErr.StatusCode, restErr.NotificationType, restErr.Message)
+		return c.JSON(response.Code, response)
 	}
 
 	if err := position.Validate(); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+		response := response_utils.NewErrorResponse(err.StatusCode, err.NotificationType, err.Message)
+		return c.JSON(response.Code, response)
 	}
 
-	var serviceErr error
-	position, serviceErr = p.service.Create(*position)
+	position, serviceErr := p.service.Create(*position)
 	if serviceErr != nil {
-		fmt.Println(serviceErr)
+		response := response_utils.NewErrorResponse(serviceErr.StatusCode, serviceErr.NotificationType, serviceErr.Message)
+		return c.JSON(response.Code, response)
 	}
 
-	return c.JSON(http.StatusCreated, position)
+	response := response_utils.NewSuccessResponse(http.StatusCreated, "Position created", position)
+
+	return c.JSON(http.StatusCreated, response)
 }

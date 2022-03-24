@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"stock/utils/response_utils"
 )
 
 var (
@@ -17,5 +18,7 @@ type pingController struct {
 }
 
 func (p pingController) Ping(c echo.Context) error {
-	return c.JSON(http.StatusOK, "pong")
+	response := response_utils.NewSuccessResponseWithEmptyData(http.StatusOK, "pong")
+
+	return c.JSON(http.StatusOK, response)
 }

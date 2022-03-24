@@ -1,8 +1,7 @@
 package models
 
 import (
-	"github.com/labstack/echo/v4"
-	"net/http"
+	"stock/utils/error_utils"
 	"time"
 )
 
@@ -17,21 +16,22 @@ type Position struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
-func (p *Position) Validate() error {
+func (p *Position) Validate() *error_utils.RestErr {
 	if p.StockId <= 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "stock id is required")
+		return error_utils.NewBadRequestError("stock id is required", 2)
 	}
 
 	if p.Quantity <= 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "quantity is required")
+		return error_utils.NewBadRequestError("quantity is required", 3)
 	}
 
 	if p.Price <= 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "price is required")
+		return error_utils.NewBadRequestError("price is required", 4)
 	}
 
 	if p.Commission <= 0 {
-		return echo.NewHTTPError(http.StatusBadRequest, "commission is required")
+		return error_utils.NewBadRequestError("commission is required", 5)
 	}
+
 	return nil
 }

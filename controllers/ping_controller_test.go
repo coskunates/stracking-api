@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
-	"strings"
+	"stock/utils/response_utils"
 	"testing"
 )
 
@@ -19,6 +20,13 @@ func TestPingControllerPing(t *testing.T) {
 
 	err := pingController.Ping(c)
 	assert.Nil(t, err)
-	assert.EqualValues(t, "\"pong\"", strings.TrimSpace(rec.Body.String()))
+
+	var response response_utils.Response
+	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
+
 	assert.EqualValues(t, http.StatusOK, rec.Code)
+	assert.False(t, response.Error)
+	assert.Equal(t, response.Type, "success")
+	assert.EqualValues(t, "pong", response.Message)
+	assert.Nil(t, response.Data)
 }
