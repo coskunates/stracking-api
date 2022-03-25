@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	PositionController positionControllerInterface = &positionController{service: services.NewStockService(database.GetClient())}
+	PositionController positionControllerInterface = &positionController{service: services.NewPositionService(database.GetClient())}
 )
 
 type positionControllerInterface interface {
@@ -19,7 +19,7 @@ type positionControllerInterface interface {
 }
 
 type positionController struct {
-	service services.StockServiceInterface
+	service services.PositionServiceInterface
 }
 
 func (p positionController) Create(c echo.Context) error {

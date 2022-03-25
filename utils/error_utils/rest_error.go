@@ -26,7 +26,7 @@ func NewUnauthorizedError(message string, errCode int) *RestErr {
 	return &RestErr{
 		StatusCode:       http.StatusUnauthorized,
 		ErrorCode:        errCode,
-		NotificationType: "warning",
+		NotificationType: "danger",
 		Message:          message,
 		Causes:           nil,
 		Error:            "unauthorized",

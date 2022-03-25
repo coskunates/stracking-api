@@ -11,7 +11,7 @@ func TestPositionValidateWithoutStockId(t *testing.T) {
 	err := position.Validate()
 
 	assert.NotNil(t, err)
-	assert.EqualValues(t, "code=400, message=stock id is required", err.Error())
+	assert.EqualValues(t, "stock id is required", err.Message)
 }
 
 func TestPositionValidateWithoutQuantity(t *testing.T) {
@@ -20,7 +20,7 @@ func TestPositionValidateWithoutQuantity(t *testing.T) {
 	err := position.Validate()
 
 	assert.NotNil(t, err)
-	assert.EqualValues(t, "code=400, message=quantity is required", err.Error())
+	assert.EqualValues(t, "quantity is required", err.Message)
 }
 
 func TestPositionValidateWithoutPrice(t *testing.T) {
@@ -29,7 +29,7 @@ func TestPositionValidateWithoutPrice(t *testing.T) {
 	err := position.Validate()
 
 	assert.NotNil(t, err)
-	assert.EqualValues(t, "code=400, message=price is required", err.Error())
+	assert.EqualValues(t, "price is required", err.Message)
 }
 
 func TestPositionValidateWithoutCommission(t *testing.T) {
@@ -38,7 +38,7 @@ func TestPositionValidateWithoutCommission(t *testing.T) {
 	err := position.Validate()
 
 	assert.NotNil(t, err)
-	assert.EqualValues(t, "code=400, message=commission is required", err.Error())
+	assert.EqualValues(t, "commission is required", err.Message)
 }
 
 func TestPositionValidate(t *testing.T) {
