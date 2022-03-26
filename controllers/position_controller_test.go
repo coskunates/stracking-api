@@ -234,10 +234,10 @@ func (s PositionTestSuite) TestPositionControllerClosePositionGetFail() {
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
+	s.EqualValues(http.StatusNotFound, rec.Code)
 	s.True(response.Error)
 	s.Equal("warning", response.Type)
-	s.EqualValues("sale commission is required", response.Message)
+	s.EqualValues("position not found", response.Message)
 	s.Nil(response.Data)
 }
 
