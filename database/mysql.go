@@ -19,10 +19,10 @@ const (
 
 var (
 	DB       *gorm.DB
-	host     = "127.0.0.1" //os.Getenv(mysqlHost)
-	username = "root"      //os.Getenv(mysqlUserName)
-	password = "root"      //os.Getenv(mySqlPassword)
-	schema   = "stock"     //os.Getenv(mySqlSchema)
+	host     = os.Getenv(mysqlHost)
+	username = os.Getenv(mysqlUserName)
+	password = os.Getenv(mySqlPassword)
+	schema   = os.Getenv(mySqlSchema)
 )
 
 func init() {
@@ -51,10 +51,5 @@ func init() {
 }
 
 func GetClient() *gorm.DB {
-	return DB
-}
-
-func GetMockClient() *gorm.DB {
-	DB.DryRun = true
 	return DB
 }

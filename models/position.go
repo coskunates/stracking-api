@@ -2,18 +2,17 @@ package models
 
 import (
 	"stock/utils/error_utils"
-	"time"
 )
 
 type Position struct {
-	ID         uint      `json:"id" gorm:"primaryKey; autoIncrement"`
-	StockId    uint      `json:"stock_id" gorm:"index"`
-	Quantity   uint      `json:"quantity"`
-	Price      float64   `json:"price"`
-	Commission float64   `json:"commission"`
-	OpenedAt   time.Time `json:"opened_at" gorm:"index"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID         uint64  `json:"id" gorm:"primaryKey; autoIncrement"`
+	StockId    uint64  `json:"stock_id" gorm:"index"`
+	Quantity   uint64  `json:"quantity"`
+	Price      float64 `json:"price"`
+	Commission float64 `json:"commission"`
+	OpenedAt   string  `json:"opened_at" gorm:"index"`
+	CreatedAt  string  `json:"created_at" gorm:"index"`
+	UpdatedAt  string  `json:"updated_at" gorm:"index"`
 }
 
 func (p *Position) Validate() *error_utils.RestErr {
@@ -31,6 +30,10 @@ func (p *Position) Validate() *error_utils.RestErr {
 
 	if p.Commission <= 0 {
 		return error_utils.NewBadRequestError("commission is required", 5)
+	}
+
+	if p.OpenedAt == "" {
+		return error_utils.NewBadRequestError("open time is required", 5)
 	}
 
 	return nil

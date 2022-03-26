@@ -6,7 +6,7 @@ import (
 )
 
 func TestPositionValidateWithoutStockId(t *testing.T) {
-	position := Position{Price: 10.0, Quantity: 10, Commission: 2.0}
+	position := Position{Price: 10.0, Quantity: 10, Commission: 2.0, OpenedAt: "2022-03-25"}
 
 	err := position.Validate()
 
@@ -15,7 +15,7 @@ func TestPositionValidateWithoutStockId(t *testing.T) {
 }
 
 func TestPositionValidateWithoutQuantity(t *testing.T) {
-	position := Position{StockId: 1, Price: 10.0, Commission: 2.0}
+	position := Position{StockId: 1, Price: 10.0, Commission: 2.0, OpenedAt: "2022-03-25"}
 
 	err := position.Validate()
 
@@ -24,7 +24,7 @@ func TestPositionValidateWithoutQuantity(t *testing.T) {
 }
 
 func TestPositionValidateWithoutPrice(t *testing.T) {
-	position := Position{StockId: 1, Quantity: 10, Commission: 2.0}
+	position := Position{StockId: 1, Quantity: 10, Commission: 2.0, OpenedAt: "2022-03-25"}
 
 	err := position.Validate()
 
@@ -33,7 +33,7 @@ func TestPositionValidateWithoutPrice(t *testing.T) {
 }
 
 func TestPositionValidateWithoutCommission(t *testing.T) {
-	position := Position{StockId: 1, Quantity: 10, Price: 2.0}
+	position := Position{StockId: 1, Quantity: 10, Price: 2.0, OpenedAt: "2022-03-25"}
 
 	err := position.Validate()
 
@@ -41,8 +41,17 @@ func TestPositionValidateWithoutCommission(t *testing.T) {
 	assert.EqualValues(t, "commission is required", err.Message)
 }
 
-func TestPositionValidate(t *testing.T) {
+func TestPositionValidateWithoutOpenedAt(t *testing.T) {
 	position := Position{StockId: 1, Quantity: 10, Price: 2.0, Commission: 0.5}
+
+	err := position.Validate()
+
+	assert.NotNil(t, err)
+	assert.EqualValues(t, "open time is required", err.Message)
+}
+
+func TestPositionValidate(t *testing.T) {
+	position := Position{StockId: 1, Quantity: 10, Price: 2.0, Commission: 0.5, OpenedAt: "2022-03-25"}
 
 	err := position.Validate()
 
