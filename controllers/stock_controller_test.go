@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
@@ -88,6 +89,74 @@ func (s StockTestSuite) TestStockControllerListNotFound() {
 	s.True(response.Error)
 	s.Equal("warning", response.Type)
 	s.EqualValues("there is no stock", response.Message)
+	s.Nil(response.Data)
+}
+
+func (s StockTestSuite) TestStockControllerCreate() {
+	stockController := stockController{service: services.NewStockService()}
+
+	e := echo.New()
+	var jsonStr = []byte(`{"name": "Test Stock", "short_name": "TESTS", "country": "Turkey", "exchange": "Istanbul", "currency": "TRY"}`)
+	req := httptest.NewRequest(http.MethodPost, "/stocks", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	err := stockController.Create(c)
+	s.Nil(err)
+
+	var response response_utils.Response
+	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
+
+	s.EqualValues(http.StatusCreated, rec.Code)
+	s.False(response.Error)
+	s.Equal("success", response.Type)
+	s.EqualValues("Stock created", response.Message)
+	s.NotNil(response.Data)
+}
+
+func (s StockTestSuite) TestStockControllerCreateBindJsonFail() {
+	stockController := stockController{service: services.NewStockService()}
+
+	e := echo.New()
+	var jsonStr = []byte(`{"name": "Test Stock", "short_name": "TESTS", "country": "Turkey", "exchange": "Istanbul", "currency": "TRY"}`)
+	req := httptest.NewRequest(http.MethodPost, "/stocks", bytes.NewBuffer(jsonStr))
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	err := stockController.Create(c)
+	s.Nil(err)
+
+	var response response_utils.Response
+	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
+
+	s.EqualValues(http.StatusBadRequest, rec.Code)
+	s.True(response.Error)
+	s.Equal("warning", response.Type)
+	s.EqualValues("bind error when trying to bind stock", response.Message)
+	s.Nil(response.Data)
+}
+
+func (s StockTestSuite) TestStockControllerCreateValidateFail() {
+	stockController := stockController{service: services.NewStockService()}
+
+	e := echo.New()
+	var jsonStr = []byte(`{"name": "Test Stock", "short_name": "TESTS", "exchange": "Istanbul", "currency": "TRY"}`)
+	req := httptest.NewRequest(http.MethodPost, "/stocks", bytes.NewBuffer(jsonStr))
+	req.Header.Set("Content-Type", "application/json")
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	err := stockController.Create(c)
+	s.Nil(err)
+
+	var response response_utils.Response
+	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
+
+	s.EqualValues(http.StatusBadRequest, rec.Code)
+	s.True(response.Error)
+	s.Equal("warning", response.Type)
+	s.EqualValues("stock country is required", response.Message)
 	s.Nil(response.Data)
 }
 

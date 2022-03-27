@@ -26,5 +26,9 @@ func (s *Stock) Validate() *error_utils.RestErr {
 		return error_utils.NewBadRequestError("stock country is required", 17)
 	}
 
+	if s.Currency == "" {
+		return error_utils.NewBadRequestError("currency is required", 19)
+	}
+
 	return nil
 }

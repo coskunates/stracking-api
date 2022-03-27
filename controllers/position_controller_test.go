@@ -19,7 +19,7 @@ type PositionTestSuite struct {
 }
 
 // this function executes before the test suite begins execution
-func (s *PositionTestSuite) SetupSuite() {
+func (p *PositionTestSuite) SetupSuite() {
 	positions := []models.Position{
 		{
 			ID:         1,
@@ -37,12 +37,12 @@ func (s *PositionTestSuite) SetupSuite() {
 }
 
 // this function executes after all tests executed
-func (s *PositionTestSuite) TearDownSuite() {
+func (p *PositionTestSuite) TearDownSuite() {
 	database.GetClient().Exec("TRUNCATE positions")
 	database.GetClient().Exec("TRUNCATE closed_positions")
 }
 
-func (s PositionTestSuite) TestPositionControllerCreate() {
+func (p PositionTestSuite) TestPositionControllerCreate() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -53,20 +53,20 @@ func (s PositionTestSuite) TestPositionControllerCreate() {
 	c := e.NewContext(req, rec)
 
 	err := positionController.Create(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusCreated, rec.Code)
-	s.False(response.Error)
-	s.Equal("success", response.Type)
-	s.EqualValues("Position created", response.Message)
-	s.NotNil(response.Data)
+	p.EqualValues(http.StatusCreated, rec.Code)
+	p.False(response.Error)
+	p.Equal("success", response.Type)
+	p.EqualValues("Position created", response.Message)
+	p.NotNil(response.Data)
 
 }
 
-func (s PositionTestSuite) TestPositionControllerCreateBindJsonFail() {
+func (p PositionTestSuite) TestPositionControllerCreateBindJsonFail() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -76,19 +76,19 @@ func (s PositionTestSuite) TestPositionControllerCreateBindJsonFail() {
 	c := e.NewContext(req, rec)
 
 	err := positionController.Create(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("bind error when trying to bind position", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusBadRequest, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("bind error when trying to bind position", response.Message)
+	p.Nil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerCreateServiceFail() {
+func (p PositionTestSuite) TestPositionControllerCreateServiceFail() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -99,18 +99,18 @@ func (s PositionTestSuite) TestPositionControllerCreateServiceFail() {
 	c := e.NewContext(req, rec)
 
 	err := positionController.Create(c)
-	s.Nil(err)
+	p.Nil(err)
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("stock id is required", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusBadRequest, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("stock id is required", response.Message)
+	p.Nil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerClose() {
+func (p PositionTestSuite) TestPositionControllerClose() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -125,19 +125,19 @@ func (s PositionTestSuite) TestPositionControllerClose() {
 	c.SetParamValues("1")
 
 	err := positionController.Close(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusOK, rec.Code)
-	s.False(response.Error)
-	s.Equal("success", response.Type)
-	s.EqualValues("Position closed successfully", response.Message)
-	s.NotNil(response.Data)
+	p.EqualValues(http.StatusOK, rec.Code)
+	p.False(response.Error)
+	p.Equal("success", response.Type)
+	p.EqualValues("Position closed successfully", response.Message)
+	p.NotNil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerCloseBindJsonFail() {
+func (p PositionTestSuite) TestPositionControllerCloseBindJsonFail() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -151,19 +151,19 @@ func (s PositionTestSuite) TestPositionControllerCloseBindJsonFail() {
 	c.SetParamValues("1")
 
 	err := positionController.Close(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("bind error when trying to bind closed position", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusBadRequest, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("bind error when trying to bind closed position", response.Message)
+	p.Nil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerCloseValidateFail() {
+func (p PositionTestSuite) TestPositionControllerCloseValidateFail() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -178,19 +178,19 @@ func (s PositionTestSuite) TestPositionControllerCloseValidateFail() {
 	c.SetParamValues("1")
 
 	err := positionController.Close(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("sale commission is required", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusBadRequest, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("sale commission is required", response.Message)
+	p.Nil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerCloseWithoutPathParameters() {
+func (p PositionTestSuite) TestPositionControllerCloseWithoutPathParameters() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -201,19 +201,19 @@ func (s PositionTestSuite) TestPositionControllerCloseWithoutPathParameters() {
 	c := e.NewContext(req, rec)
 
 	err := positionController.Close(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusBadRequest, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("invalid position id", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusBadRequest, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("invalid position id", response.Message)
+	p.Nil(response.Data)
 }
 
-func (s PositionTestSuite) TestPositionControllerClosePositionGetFail() {
+func (p PositionTestSuite) TestPositionControllerClosePositionGetFail() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
@@ -228,16 +228,16 @@ func (s PositionTestSuite) TestPositionControllerClosePositionGetFail() {
 	c.SetParamValues("100000000")
 
 	err := positionController.Close(c)
-	s.Nil(err)
+	p.Nil(err)
 
 	var response response_utils.Response
 	_ = json.Unmarshal([]byte(rec.Body.String()), &response)
 
-	s.EqualValues(http.StatusNotFound, rec.Code)
-	s.True(response.Error)
-	s.Equal("warning", response.Type)
-	s.EqualValues("position not found", response.Message)
-	s.Nil(response.Data)
+	p.EqualValues(http.StatusNotFound, rec.Code)
+	p.True(response.Error)
+	p.Equal("warning", response.Type)
+	p.EqualValues("position not found", response.Message)
+	p.Nil(response.Data)
 }
 
 func TestPositionTestSuite(t *testing.T) {

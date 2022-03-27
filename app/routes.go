@@ -10,4 +10,5 @@ func handleRoutes(e *echo.Echo) {
 	e.POST("/positions", controllers.PositionController.Create)
 	e.POST("/positions/:position_id/close", controllers.PositionController.Close)
 	e.GET("/stocks", controllers.StockController.List)
+	e.POST("/stocks", controllers.StockController.Create)
 }

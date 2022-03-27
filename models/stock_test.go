@@ -72,3 +72,20 @@ func TestStockValidateWithoutCountry(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.EqualValues(t, "stock country is required", err.Message)
 }
+
+func TestStockValidateWithoutCurrency(t *testing.T) {
+	stock := Stock{
+		ID:        1,
+		Name:      "Turkcell",
+		ShortName: "TCELL",
+		Exchange:  "İstanbul",
+		Country:   "Turkey",
+		CreatedAt: "2022-03-26 14:00:00",
+		UpdatedAt: "2022-03-26 14:00:00",
+	}
+
+	err := stock.Validate()
+
+	assert.NotNil(t, err)
+	assert.EqualValues(t, "currency is required", err.Message)
+}
