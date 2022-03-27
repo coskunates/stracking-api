@@ -9,8 +9,8 @@ type Stock struct {
 	Country   string `json:"country"`
 	Exchange  string `json:"exchange"`
 	Currency  string `json:"currency"`
-	CreatedAt string `json:"created_at" gorm:"index"`
-	UpdatedAt string `json:"updated_at" gorm:"index"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func (s *Stock) Validate() *error_utils.RestErr {

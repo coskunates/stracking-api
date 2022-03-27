@@ -46,7 +46,7 @@ func (s *StockTestSuite) TearDownSuite() {
 	database.GetClient().Exec("TRUNCATE stocks")
 }
 
-func (s StockTestSuite) TestStockControllerList() {
+func (s *StockTestSuite) TestStockControllerList() {
 	s.seedStock()
 	stockController := stockController{service: services.NewStockService()}
 
@@ -69,7 +69,7 @@ func (s StockTestSuite) TestStockControllerList() {
 	s.NotNil(response.Data)
 }
 
-func (s StockTestSuite) TestStockControllerListNotFound() {
+func (s *StockTestSuite) TestStockControllerListNotFound() {
 	s.clearStocks()
 	stockController := stockController{service: services.NewStockService()}
 
@@ -92,7 +92,7 @@ func (s StockTestSuite) TestStockControllerListNotFound() {
 	s.Nil(response.Data)
 }
 
-func (s StockTestSuite) TestStockControllerCreate() {
+func (s *StockTestSuite) TestStockControllerCreate() {
 	stockController := stockController{service: services.NewStockService()}
 
 	e := echo.New()
@@ -115,7 +115,7 @@ func (s StockTestSuite) TestStockControllerCreate() {
 	s.NotNil(response.Data)
 }
 
-func (s StockTestSuite) TestStockControllerCreateBindJsonFail() {
+func (s *StockTestSuite) TestStockControllerCreateBindJsonFail() {
 	stockController := stockController{service: services.NewStockService()}
 
 	e := echo.New()
@@ -137,7 +137,7 @@ func (s StockTestSuite) TestStockControllerCreateBindJsonFail() {
 	s.Nil(response.Data)
 }
 
-func (s StockTestSuite) TestStockControllerCreateValidateFail() {
+func (s *StockTestSuite) TestStockControllerCreateValidateFail() {
 	stockController := stockController{service: services.NewStockService()}
 
 	e := echo.New()
