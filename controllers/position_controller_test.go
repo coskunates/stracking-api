@@ -16,7 +16,6 @@ import (
 
 type PositionTestSuite struct {
 	suite.Suite
-	positionId int
 }
 
 // this function executes before the test suite begins execution
