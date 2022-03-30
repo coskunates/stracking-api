@@ -7,6 +7,7 @@ type Stock struct {
 	Name      string `json:"name"`
 	ShortName string `json:"short_name"`
 	Country   string `json:"country"`
+	Sector    string `json:"sector"`
 	Exchange  string `json:"exchange"`
 	Currency  string `json:"currency"`
 	CreatedAt string `json:"created_at"`

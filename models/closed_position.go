@@ -9,6 +9,7 @@ type ClosedPosition struct {
 	ID             uint64  `json:"id" gorm:"primaryKey; autoIncrement"`
 	PositionId     uint64  `json:"position_id" gorm:"index"`
 	StockId        uint64  `json:"stock_id" gorm:"index"`
+	Stock          Stock   `json:"stock" gorm:"foreignKey:StockId;references:id"`
 	Quantity       uint64  `json:"quantity"`
 	Price          float64 `json:"price"`
 	Commission     float64 `json:"commission"`
