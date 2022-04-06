@@ -26,7 +26,7 @@ func (d *DividendTestSuite) TestDividendControllerCreate() {
 	dividendController := dividendController{service: services.NewDividendService()}
 
 	e := echo.New()
-	var jsonStr = []byte(`{"stock_id": 1, "quantity": 10, "price": 15.0}`)
+	var jsonStr = []byte(`{"currency_id":1, "stock_id": 1, "quantity": 10, "price": 15.0, "issued_at": "2022-04-06"}`)
 	req := httptest.NewRequest(http.MethodPost, "/dividends", bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()

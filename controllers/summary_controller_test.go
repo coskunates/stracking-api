@@ -96,7 +96,7 @@ func (s *SummaryTestSuite) clear() {
 	database.GetClient().Exec("TRUNCATE closed_positions")
 }
 
-func (s *SummaryTestSuite) TestSummaryControllerGetSummary() {
+func (s *SummaryTestSuite) TestSummaryControllerGetPortfolio() {
 	s.seed()
 	summaryController := summaryController{service: services.NewSummaryService()}
 
@@ -106,7 +106,7 @@ func (s *SummaryTestSuite) TestSummaryControllerGetSummary() {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	err := summaryController.GetSummary(c)
+	err := summaryController.GetPortfolio(c)
 	s.Nil(err)
 
 	var response response_utils.Response
@@ -129,7 +129,7 @@ func (s *SummaryTestSuite) TestSummaryControllerGetSummaryServiceError() {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
-	err := summaryController.GetSummary(c)
+	err := summaryController.GetPortfolio(c)
 	s.Nil(err)
 
 	var response response_utils.Response

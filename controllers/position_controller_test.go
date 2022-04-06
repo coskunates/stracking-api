@@ -25,6 +25,7 @@ func (p *PositionTestSuite) SetupSuite() {
 			ID:         1,
 			StockId:    1,
 			Quantity:   10,
+			CurrencyId: 1,
 			Price:      5.0,
 			Commission: 0.5,
 			OpenedAt:   "2022-03-25",
@@ -114,7 +115,7 @@ func (p PositionTestSuite) TestPositionControllerClose() {
 	positionController := positionController{service: services.NewPositionService()}
 
 	e := echo.New()
-	var jsonStr = []byte(`{"sale_quantity":10, "sale_price": 15, "sale_commission": 1.0}`)
+	var jsonStr = []byte(`{"sale_quantity":5, "sale_price": 15, "sale_commission": 1.0, "closed_at": "2022-04-06"}`)
 	req := httptest.NewRequest(http.MethodPost, "/positions/:position_id/close", bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 	rec := httptest.NewRecorder()
@@ -236,7 +237,7 @@ func (p PositionTestSuite) TestPositionControllerClosePositionGetFail() {
 	p.EqualValues(http.StatusNotFound, rec.Code)
 	p.True(response.Error)
 	p.Equal("warning", response.Type)
-	p.EqualValues("position not found", response.Message)
+	p.EqualValues("error when trying to get position", response.Message)
 	p.Nil(response.Data)
 }
 

@@ -12,7 +12,7 @@ func NewSummaryService() SummaryServiceInterface {
 }
 
 type SummaryServiceInterface interface {
-	Summary() (*[]models.Position, *error_utils.RestErr)
+	Portfolio() (*[]models.Position, *error_utils.RestErr)
 	OpenPositions() (*[]models.Position, *error_utils.RestErr)
 	ClosedPositions() (*[]models.ClosedPosition, *error_utils.RestErr)
 }
@@ -43,7 +43,7 @@ func (s summaryService) ClosedPositions() (*[]models.ClosedPosition, *error_util
 	}
 }
 
-func (s summaryService) Summary() (*[]models.Position, *error_utils.RestErr) {
+func (s summaryService) Portfolio() (*[]models.Position, *error_utils.RestErr) {
 	var positions []models.Position
 
 	result := s.client.Select("stock_id," +

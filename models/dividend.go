@@ -3,12 +3,14 @@ package models
 import "stock/utils/error_utils"
 
 type Dividend struct {
-	ID        uint64  `json:"id" gorm:"primaryKey; autoIncrement"`
-	StockId   uint64  `json:"stock_id"`
-	Quantity  uint64  `json:"quantity"`
-	Price     float64 `json:"price"`
-	CreatedAt string  `json:"created_at"`
-	UpdatedAt string  `json:"updated_at"`
+	ID         uint64  `json:"id" gorm:"primaryKey; autoIncrement"`
+	StockId    uint64  `json:"stock_id"`
+	Quantity   uint64  `json:"quantity"`
+	CurrencyId int64   `json:"currency_id"`
+	Price      float64 `json:"price"`
+	IssuedAt   string  `json:"issued_at"`
+	CreatedAt  string  `json:"created_at"`
+	UpdatedAt  string  `json:"updated_at"`
 }
 
 func (d *Dividend) Validate() *error_utils.RestErr {

@@ -9,6 +9,7 @@ type Position struct {
 	StockId    uint64  `json:"stock_id" gorm:"index"`
 	Stock      Stock   `json:"stock" gorm:"foreignKey:StockId;references:id"`
 	Quantity   uint64  `json:"quantity"`
+	CurrencyId uint64  `json:"currency_id"`
 	Price      float64 `json:"price"`
 	Commission float64 `json:"commission"`
 	OpenedAt   string  `json:"opened_at" gorm:"index"`

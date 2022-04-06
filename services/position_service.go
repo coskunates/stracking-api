@@ -17,6 +17,7 @@ type PositionServiceInterface interface {
 	Get(models.Position) (*models.Position, *error_utils.RestErr)
 	Create(models.Position) (*models.Position, *error_utils.RestErr)
 	ClosePosition(models.ClosedPosition) (*models.ClosedPosition, *error_utils.RestErr)
+	GetOpenPositions() (*[]models.Position, *error_utils.RestErr)
 }
 
 type positionService struct {
@@ -24,25 +25,13 @@ type positionService struct {
 }
 
 func (p positionService) Get(position models.Position) (*models.Position, *error_utils.RestErr) {
-	result := p.client.First(&position, "id = ?", position.ID)
-	if result.RowsAffected > 0 {
-		if err := result.Row().Scan(&position.ID,
-			&position.StockId,
-			&position.Quantity,
-			&position.Price,
-			&position.Commission,
-			&position.OpenedAt,
-			&position.CreatedAt,
-			&position.UpdatedAt,
-		); err != nil {
-			logger_utils.Error("error when trying to save position", err)
-			return nil, error_utils.NewInternalServerError("error when trying to save position", 6)
-		}
+	result := p.client.Model(&position).First(&position, "id = ?", position.ID).Scan(&position)
+	if result.RowsAffected <= 0 {
+		logger_utils.Info("error when trying to get position")
+		return nil, error_utils.NewNotFoundError("error when trying to get position", 6)
 	} else {
-		return nil, error_utils.NewNotFoundError("position not found", 7)
+		return &position, nil
 	}
-
-	return &position, nil
 }
 
 func (p positionService) Create(pr models.Position) (*models.Position, *error_utils.RestErr) {
@@ -58,7 +47,6 @@ func (p positionService) Create(pr models.Position) (*models.Position, *error_ut
 }
 
 func (p positionService) ClosePosition(cp models.ClosedPosition) (*models.ClosedPosition, *error_utils.RestErr) {
-	cp.ClosedAt = date_utils.GetNowAsString()
 	cp.CreatedAt = date_utils.GetNowAsString()
 	cp.UpdatedAt = date_utils.GetNowAsString()
 
@@ -71,7 +59,20 @@ func (p positionService) ClosePosition(cp models.ClosedPosition) (*models.Closed
 		p.client.Model(&models.Position{}).Where("id = ?", cp.PositionId).Updates(models.Position{
 			Quantity: cp.Quantity - cp.SaleQuantity,
 		})
+	} else if cp.Quantity == cp.SaleQuantity {
+		p.client.Delete(&models.Position{}, cp.PositionId)
 	}
 
 	return &cp, nil
+}
+
+func (p positionService) GetOpenPositions() (*[]models.Position, *error_utils.RestErr) {
+	var positions []models.Position
+
+	result := p.client.Joins("Stock").Order("opened_at desc").Find(&positions).Scan(&positions)
+	if result.RowsAffected > 0 {
+		return &positions, nil
+	} else {
+		return nil, error_utils.NewNotFoundError("there is no position", 18)
+	}
 }

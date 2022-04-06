@@ -13,7 +13,7 @@ var (
 )
 
 type summaryControllerInterface interface {
-	GetSummary(echo.Context) error
+	GetPortfolio(echo.Context) error
 	GetOpenPositionSummary(echo.Context) error
 	GetClosedPositionSummary(echo.Context) error
 }
@@ -22,8 +22,8 @@ type summaryController struct {
 	service services.SummaryServiceInterface
 }
 
-func (s summaryController) GetSummary(c echo.Context) error {
-	positions, serviceErr := s.service.Summary()
+func (s summaryController) GetPortfolio(c echo.Context) error {
+	positions, serviceErr := s.service.Portfolio()
 	if serviceErr != nil {
 		response := response_utils.NewErrorResponse(serviceErr.StatusCode, serviceErr.NotificationType, serviceErr.Message)
 		return c.JSON(response.Code, response)

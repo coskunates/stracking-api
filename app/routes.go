@@ -12,7 +12,7 @@ func handleRoutes(e *echo.Echo) {
 	e.GET("/stocks", controllers.StockController.List)
 	e.POST("/stocks", controllers.StockController.Create)
 	e.POST("/dividends", controllers.DividendController.Create)
-	e.GET("/summaries", controllers.SummaryController.GetSummary)
+	e.GET("/summaries/portfolio", controllers.SummaryController.GetPortfolio)
 	e.GET("/summaries/opened", controllers.SummaryController.GetOpenPositionSummary)
 	e.GET("/summaries/closed", controllers.SummaryController.GetClosedPositionSummary)
 }

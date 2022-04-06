@@ -67,6 +67,7 @@ func (p positionController) Close(c echo.Context) error {
 		PositionId: position.ID,
 		StockId:    position.StockId,
 		Quantity:   position.Quantity,
+		CurrencyId: position.CurrencyId,
 		Price:      position.Price,
 		Commission: position.Commission,
 		OpenedAt:   position.OpenedAt,
