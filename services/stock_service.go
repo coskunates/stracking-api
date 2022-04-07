@@ -15,7 +15,8 @@ func NewStockService() StockServiceInterface {
 
 type StockServiceInterface interface {
 	List() (*[]models.Stock, *error_utils.RestErr)
-	Create(stock models.Stock) (*models.Stock, *error_utils.RestErr)
+	Create(models.Stock) (*models.Stock, *error_utils.RestErr)
+	UpdateStockCurrentPrice(uint64, float64)
 }
 
 type stockService struct {
@@ -42,4 +43,10 @@ func (s stockService) Create(stock models.Stock) (*models.Stock, *error_utils.Re
 	}
 
 	return &stock, nil
+}
+
+func (s stockService) UpdateStockCurrentPrice(stockId uint64, f float64) {
+	s.client.Model(&models.Stock{}).Where("id = ?", stockId).Updates(models.Stock{
+		Price: f,
+	})
 }

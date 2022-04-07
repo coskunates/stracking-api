@@ -3,16 +3,18 @@ package models
 import "stock/utils/error_utils"
 
 type Stock struct {
-	ID         uint64 `json:"id" gorm:"primaryKey; autoIncrement"`
-	Name       string `json:"name"`
-	ShortName  string `json:"short_name"`
-	Country    string `json:"country"`
-	Sector     string `json:"sector"`
-	Exchange   string `json:"exchange"`
-	Currency   string `json:"currency"`
-	CurrencyId int64  `json:"currency_id"`
-	CreatedAt  string `json:"created_at"`
-	UpdatedAt  string `json:"updated_at"`
+	ID         uint64  `json:"id" gorm:"primaryKey; autoIncrement"`
+	FcsApiId   uint64  `json:"-"`
+	Name       string  `json:"name"`
+	ShortName  string  `json:"short_name"`
+	Country    string  `json:"country"`
+	Sector     string  `json:"sector"`
+	Exchange   string  `json:"exchange"`
+	Currency   string  `json:"currency"`
+	Price      float64 `json:"price"`
+	CurrencyId int64   `json:"currency_id"`
+	CreatedAt  string  `json:"created_at"`
+	UpdatedAt  string  `json:"updated_at"`
 }
 
 func (s *Stock) Validate() *error_utils.RestErr {
